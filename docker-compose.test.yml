@@ -1,0 +1,35 @@
+version: "3"
+services:
+  backend:
+    container_name: nodejs
+    restart: always
+    build: ./
+    ports:
+      - "3010:3010"
+    volumes:
+      - .:/app
+      - ./error.log:/usr/src/app/error.log
+    links:
+      - mongo
+      - elasticsearch
+  mongo:
+    container_name: mongo
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./data:/data/db
+  elasticsearch:
+    container_name: elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.0.0
+    environment:
+      - node.name=es01
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+volumes:
+  esdata:
+    driver: local

@@ -1,0 +1,12 @@
+version: "3"
+services:
+  backend:
+    container_name: nodejs
+    restart: always
+    build: ./
+    ports:
+      - "3010:3010"
+    volumes:
+      - .:/app
+      - ./error.log:/usr/src/app/error.log
+  
